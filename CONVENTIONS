@@ -1,0 +1,5 @@
+All units used internally in code shall be SI-units: kilograms, meters, meters per second, kelvins, radians, radians per second, volts, ampères, watts, ohms, farads, henries, etc. 
+
+For final results, as well as monitoring and diagnostics, other units can be used for interpretation, but the internal processing should always be done consistently SI to avoid errors.
+
+Coordinate system: x0=y0=z0=0

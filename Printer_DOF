@@ -1,0 +1,10 @@
+theta_l-,theta_r+ = y- (x forces cancel)
+theta_l+,theta_r- = y+ (x forces cancel)
+theta_l-,theta_r- = x- (y forces cancel)
+theta_l+,theta_r+ = x+ (y forces cancel)
+
+x(theta_l,theta_r) = 0.5r_m(theta_l + theta_r)  (1mm of left displacement and 1mm of right displacement should be 1mm of nozzle displacement)
+y(theta_l,theta_r) = 0.5r_m(theta_l - theta_r)
+
+x'(theta_l,theta_r) = 0.5r_m(theta_l' + theta_r') 
+y'(theta_l,theta_r) = 0.5r_m(theta_l' - theta_r')
