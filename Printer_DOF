@@ -8,3 +8,39 @@ y(theta_l,theta_r) = 0.5r_m(theta_l - theta_r)
 
 x'(theta_l,theta_r) = 0.5r_m(theta_l' + theta_r') 
 y'(theta_l,theta_r) = 0.5r_m(theta_l' - theta_r')
+
+We choose a state vector:
+x_ = [theta_l', theta_r', theta_l, theta_r, i_ml, i_mr, x, y]^T
+x_' = [theta_l'', theta_r'', theta_l', theta_r', i_ml', i_mr', x', y']^T
+
+theta_l''(u_ml) = J_m tau_l
+with tau_l = K_m i_ml
+with i_ml' = (1/L_m)(u_ml-R_m i_ml), i_ml(0)=0
+
+-> f(x_):
+theta_l'' = J_m K_m i_ml
+theta_r'' = J_m K_m i_mr
+theta_l' = theta_l'
+theta_r' = theta_r'
+i_ml' = (1/L_m)(u_ml-R_m i_ml)
+i_mr' = (1/L_m)(u_mr-R_m i_mr)
+x' = x'
+y' = y'
+
+The input u is the motor voltages: u = [u_ml, u_mr]^T, B would be an 8x2 matrix (A 8x8)
+
+So far we have not yet modeled the inertia of the toolhead, which has to be added to the model.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
