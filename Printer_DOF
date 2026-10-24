@@ -44,6 +44,26 @@ y' = 0.5r_m(theta_l' - theta_r')
 
 The inertia would in practice add current back into the motor LR circuits, but this is assumed to be negligable.
 
+A and B matrices can be easily derived from these equations, given x_' = Ax_+Bu
+
+A = [[0,        0,      0,      0, K_m/(J_m + 0.5m r_m^2),      0,      0,      0],
+     [0,        0,      0,      0,      0, K_m/(J_m + 0.5m r_m^2),      0,      0],
+     [1,        0,      0,      0,      0,      0,      0,      0],
+     [0,        1,      0,      0,      0,      0,      0,      0],
+     [0,        0,      0,      0, -R_m/L_m,    0,      0,      0],
+     [0,        0,      0,      0,      0, -R_m/L_m,    0,      0],
+     [0.5r_m, 0.5r_m    0,      0,      0,      0,      0,      0],
+     [0.5r_m, -0.5r_m   0,      0,      0,      0,      0,      0]]
+
+B = [[0,        0       ],
+     [0,        0       ],
+     [0,        0       ],
+     [0,        0       ],
+     [1/L_m,    0       ],
+     [0,        1/L_m   ],
+     [0,        0       ],
+     [0,        0       ]]
+
 
 
 
