@@ -13,23 +13,36 @@ We choose a state vector:
 x_ = [theta_l', theta_r', theta_l, theta_r, i_ml, i_mr, x, y]^T
 x_' = [theta_l'', theta_r'', theta_l', theta_r', i_ml', i_mr', x', y']^T
 
-theta_l''(u_ml) = J_m tau_l
+theta_l''(u_ml) = tau_l / J_m
 with tau_l = K_m i_ml
 with i_ml' = (1/L_m)(u_ml-R_m i_ml), i_ml(0)=0
 
 -> f(x_):
-theta_l'' = J_m K_m i_ml
-theta_r'' = J_m K_m i_mr
+theta_l'' = K_m i_ml / J_m
+theta_r'' = K_m i_mr / J_m
 theta_l' = theta_l'
 theta_r' = theta_r'
 i_ml' = (1/L_m)(u_ml-R_m i_ml)
 i_mr' = (1/L_m)(u_mr-R_m i_mr)
-x' = x'
-y' = y'
+x' = 0.5r_m(theta_l' + theta_r') 
+y' = 0.5r_m(theta_l' - theta_r')
 
 The input u is the motor voltages: u = [u_ml, u_mr]^T, B would be an 8x2 matrix (A 8x8)
 
 So far we have not yet modeled the inertia of the toolhead, which has to be added to the model.
+This can be modelled as an extra angular inertia added to the motors (distributed a constant 50/50, proof to be added)
+
+The total added angular inertia is m r_m^2. Therefore the new equations are:
+theta_l'' = K_m i_ml / (J_m + 0.5m r_m^2)
+theta_r'' = K_m i_mr / (J_m + 0.5m r_m^2)
+theta_l' = theta_l'
+theta_r' = theta_r'
+i_ml' = (1/L_m)(u_ml-R_m i_ml)
+i_mr' = (1/L_m)(u_mr-R_m i_mr)
+x' = 0.5r_m(theta_l' + theta_r') 
+y' = 0.5r_m(theta_l' - theta_r')
+
+The inertia would in practice add current back into the motor LR circuits, but this is assumed to be negligable.
 
 
 
