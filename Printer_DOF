@@ -15,15 +15,15 @@ x_' = [theta_l'', theta_r'', theta_l', theta_r', i_ml', i_mr', x', y']^T
 
 theta_l''(u_ml) = tau_l / J_m
 with tau_l = K_m i_ml
-with i_ml' = (1/L_m)(u_ml-R_m i_ml), i_ml(0)=0
+with i_ml' = (u_ml-R_m i_ml)/L_m, i_ml(0)=0
 
 -> f(x_):
 theta_l'' = K_m i_ml / J_m
 theta_r'' = K_m i_mr / J_m
 theta_l' = theta_l'
 theta_r' = theta_r'
-i_ml' = (1/L_m)(u_ml-R_m i_ml)
-i_mr' = (1/L_m)(u_mr-R_m i_mr)
+i_ml' = (u_ml-R_m i_ml) / L_m
+i_mr' = (u_mr-R_m i_mr) / L_m
 x' = 0.5r_m(theta_l' + theta_r') 
 y' = 0.5r_m(theta_l' - theta_r')
 
@@ -37,8 +37,8 @@ theta_l'' = K_m i_ml / (J_m + 0.5m r_m^2)
 theta_r'' = K_m i_mr / (J_m + 0.5m r_m^2)
 theta_l' = theta_l'
 theta_r' = theta_r'
-i_ml' = (1/L_m)(u_ml-R_m i_ml)
-i_mr' = (1/L_m)(u_mr-R_m i_mr)
+i_ml' = (u_ml-R_m i_ml) / L_m
+i_mr' = (u_mr-R_m i_mr) / L_m
 x' = 0.5r_m(theta_l' + theta_r') 
 y' = 0.5r_m(theta_l' - theta_r')
 
@@ -65,6 +65,67 @@ B = [[0,        0       ],
      [0,        0       ]]
 
 
+====================================================================
+Decoupled x and y:
+
+Before, we already determined that
+x(theta_l,theta_r) = 0.5r_m(theta_l + theta_r)
+y(theta_l,theta_r) = 0.5r_m(theta_l - theta_r)
+x'(theta_l,theta_r) = 0.5r_m(theta_l' + theta_r') 
+y'(theta_l,theta_r) = 0.5r_m(theta_l' - theta_r')
+
+Expanding this:
+x''(theta_l,theta_r) = 0.5r_m(theta_l'' + theta_r'') 
+y''(theta_l,theta_r) = 0.5r_m(theta_l'' - theta_r'')
+
+x'' = 0.5r_m(K_m i_ml / (J_m + 0.5m r_m^2) + K_m i_mr / (J_m + 0.5m r_m^2))
+= r_m K_m (i_ml + i_mr) / (2(J_m + 0.5m r_m^2))
+with (i_ml + i_mr)' = i_ml' + i_mr' = (u_ml+u_mr-R_m(i_ml+i_mr)) / L_m
+
+Note that u_ml and u_mr are our inputs, and i_ml and i_mr are state variables.
+Define a new input u_x = u_ml+u_mr and a new state variable i_x = i_ml+i_mr
+
+The equations for x are simplified:
+x'' = r_m K_m i_x / (2(J_m + 0.5m r_m^2))
+with i_x' = (u_x - R_m i_x) / L_m
+
+Similarly for y:
+y'' = 0.5r_m(K_m i_ml / (J_m + 0.5m r_m^2) - K_m i_mr / (J_m + 0.5m r_m^2))
+= r_m K_m (i_ml - i_mr) / (2(J_m + 0.5m r_m^2))
+with (i_ml - i_mr)' = i_ml' - i_mr' = (u_ml-u_mr-R_m(i_ml-i_mr)) / L_m
+
+We can define u_y = u_ml-u_mr, i_y = i_ml - i_mr :
+y'' = r_m K_m i_y / (2(J_m + 0.5m r_m^2))
+with i_y' = (u_y - R_m i_y) / L_m
+
+We define state x_x = [x', x, i_x]^T, and x_y = [y', y, i_y]^T
+
+x_x' = [x'', x', i_x']^T
+with x'' = r_m K_m i_x / (2(J_m + 0.5m r_m^2))
+     x' = x'
+     i_x' = (u_x - R_m i_x) / L_m
+
+We arrive at a state-space description x_x' = f_x(x_x, u_x) = A_x x_x + B_x u_x
+     
+with A_x = [[0,             0, r_m K_m / (2(J_m + 0.5m r_m^2))],
+            [1,             0,              0],
+            [0,             0,         -R_m / L_m]]
+
+     B_x = [0, 0, 1/L_m]^T
+
+For x_y, similarly:
+x_y' = [y'', y', i_y']^T
+with y'' = r_m K_m i_y / (2(J_m + 0.5m r_m^2))
+     y' = y'
+     i_y' = (u_y - R_m i_y) / L_m
+
+We arrive at a state-space description x_y' = f_y(x_y, u_y) = A_y x_y + B_y u_y
+
+with A_y = A_x = [[0,             0, r_m K_m / (2(J_m + 0.5m r_m^2))],
+                  [1,             0,              0],
+                  [0,             0,         -R_m / L_m]]
+
+     B_y = B_x = [0, 0, 1/L_m]^T
 
 
 
