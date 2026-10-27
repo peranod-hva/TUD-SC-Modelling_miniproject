@@ -146,16 +146,16 @@ u_x = L_m (2J_m + m r_m^2) x''' / (r_m K_m) + R_m (2J_m + m r_m^2) x'' / (r_m K_
 = (2J_m + m r_m^2) (L_m x''' + R_m x'') / (r_m K_m)
 
 Similarly for y:
-y'' = r_m K_m i_y / (2(J_m + 0.5m r_m^2))
+y'' = r_m K_m i_y / (2J_m + m r_m^2)
 i_y' = (u_y - R_m i_y) / L_m
 ->
-i_y = (2(J_m + 0.5m r_m^2)) y'' / (r_m K_m)
+i_y = (2J_m + m r_m^2) y'' / (r_m K_m)
 u_y = L_m i_y' + R_m i_y
 ->
-i_y' = (2(J_m + 0.5m r_m^2)) y''' / (r_m K_m)
+i_y' = (2J_m + m r_m^2) y''' / (r_m K_m)
 ->
-u_y = L_m (2(J_m + 0.5m r_m^2)) y''' / (r_m K_m) + R_m (2(J_m + 0.5m r_m^2)) y'' / (r_m K_m)
-= (2(J_m + 0.5m r_m^2)) (L_m y''' + R_m y'') / (r_m K_m)
+u_y = L_m (2J_m + m r_m^2) y''' / (r_m K_m) + R_m (2J_m + m r_m^2) y'' / (r_m K_m)
+= (2J_m + m r_m^2) (L_m y''' + R_m y'') / (r_m K_m)
 
 Therefore, from x''', x'', y''', y'', we can calculate u_x and u_y.
 
