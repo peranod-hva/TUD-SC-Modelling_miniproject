@@ -1,0 +1,83 @@
+Q2.1 Finite State Machine - Filament Replacement
+
+The filament is replaced when a new colour is required (C) or when the
+current spool is finished (F). These are two independent discrete signals
+that start the same replacement sequence.
+
+The wipe location is initially defined as an arbitrary position
+P_wipe = (x_p, y_p). 
+
+Before leaving the printing state, the printer stores the current print
+head position P_saved = (x_s, y_s) and the current printing progress.
+
+
+1. State definitions
+
+P   Printing
+    The printer follows the printing path and deposits filament.
+
+MW  Moving to Wipe
+    Printing has stopped. The print head moves to (x_p, y_p).
+
+W   Wiping
+    Excess filament is removed at the wipe location.
+
+L   Loading
+    Nozzle heating is switched off, and the new filament is loaded.
+
+H   Heating
+    Nozzle heating is switched on until the required temperature is reached.
+
+R   Returning
+    The print head returns to the saved position before printing resumes.
+
+State set:
+Q = {P, MW, W, L, H, R}
+
+Initial state:
+q_0 = P
+
+
+2. Events and conditions
+
+C                    New colour required
+F                    Current filament spool is finished
+at_wipe_position     Print head has reached (x_p, y_p)
+wipe_done            Wiping operation is finished
+filament_loaded      New filament is loaded
+temperature_ready    Nozzle has reached the required printing temperature
+at_saved_position    Print head has returned to (x_s, y_s)
+
+For Q2.1, these are logical event labels. In Q3.1, relevant events will
+be linked to the continuous states of the printer model.
+
+
+3. Transitions and actions
+
+P  -> MW
+Condition: C OR F
+Action:    Stop printing; save the current position and printing progress.
+
+MW -> W
+Condition: at_wipe_position
+Action:    Start wiping at the wipe location.
+
+W  -> L
+Condition: wipe_done
+Action:    Switch off nozzle heating.
+
+L  -> H
+Condition: filament_loaded
+Action:    Switch on nozzle heating.
+
+H  -> R
+Condition: temperature_ready
+Action:    Command the print head to return to the saved position.
+
+R  -> P
+Condition: at_saved_position
+Action:    Resume printing from the saved progress.
+
+The normal replacement sequence is:
+
+P -> MW -> W -> L -> H -> R -> P
