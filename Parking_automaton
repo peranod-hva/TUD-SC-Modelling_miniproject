@@ -1,0 +1,24 @@
+Parked detection:
+The automaton has the following states:
+
+q_0 unknown / not in the required sequence
+q_1 Vertical motion, horizontal unknown
+q_2 Vertical motion finished, horizontal unknown
+q_3 Vertical finished, horizontal motion
+q_a Vertical finished, horizontal finished: accepting state
+
+Q = {q_0 , q_1, q_2, q_3, q_a}
+Sigma = {(V,+), (V,0), (H,+), (H,0)}
+delta = {(q_0,(H,+),q_0), (q_0,(H,0),q_0), (q_0,(V,+),q_1), (q_0,(V,0),q_2),
+		 (q_1,(H,+),q_0), (q_1,(H,0),q_0), (q_1,(V,+),q_1), (q_1,(V,0),q_2),
+		 (q_2,(V,0),q_2), (q_2,(H,+),q_3), (q_2,(H,0),q_a),
+		 (q_3,(H,+),q_3), (q_3,(H,+),q_a)}
+Q_0 = q_0
+F = q_a
+
+To use this automaton for any other corner of the printing area, we can change the definition of the "+" direction in the
+symbols (V,+), (H,+), or equivalently swap them out with (V,-), (H,-).
+
+So for the x+ y+ corner, replace (V,+) and (H,+) with (V,-) and (H,-).
+For the x=0 y+ corner, replace only (V,+) with (V,-).
+For the x+ y=0 corner, replace only (H,+) with (H,-).
