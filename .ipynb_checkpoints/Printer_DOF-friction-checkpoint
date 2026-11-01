@@ -1,0 +1,88 @@
+To add bearing friction, consider in which cases the bearings are active. There turn out to be two cases: x motion and y motion. Therefore, it is easier to work with an effective x friction and an effective y friction.
+The linear generate friction such that F = -mu_l v. 
+Rolling bearings generally generate friction such that F = -mu_r theta'. We convert this to a form using rolling velocity: F = -mu_rv v:
+F = -mu_r theta' = -mu_rv r_b theta' = -mu_rv v. With r_b the bearing radius.
+-> mu_r = mu_rv r_b -> mu_rv = mu_r / r_b
+
+The rolling bearings and linear bearings can now be added up to an effective x friction coefficient and y friction coefficient:
+In the case of x translation, we have two active linear x-bearings and 8 active rolling bearings:
+mu_x = 2*mu_lx + 8*mu_r/r_b
+= 2 mu_lx + 8 mu_rv
+
+In the case of y translation, we have two active linear y-bearings and 4 active rolling bearings:
+mu_y = 2*mu_ly + 4*mu_r/rb
+= 2 mu_ly + 4 mu_rv
+
+=======================================================
+These frictions can most easily be added to the decoupled x and y dynamics:
+
+First, realize how friction F results in acceleration.
+Our rotational inertia was (2J_m + m r_m^2).
+Therefore, the linear inertia is (2J_m / r_m^2 + m)          (mr^2=I -> m=I/r^2)
+
+F = (2J_m / r_m^2 + m) a
+a = F / (2J_m / r_m^2 + m)
+
+Add this acceleration to x_x = [x', x, i_x]^T:
+
+x_x' = [x'', x', i_x']^T
+with x'' = r_m K_m i_x / (2J_m + m r_m^2) - mu_x x' / (2J_m / r_m^2 + m)
+     x' = x'
+
+     i_x' = (u_x - R_m i_x) / L_m
+
+x_x' = f_x(x_x, u_x) = A_x x_x + B_x u_x
+     
+with A_x = [[-mu_x / (2J_m / r_m^2 + m),     0,     r_m K_m / (2J_m + m r_m^2)],
+            [1,                              0,                   0],
+            [0,                              0,              -R_m / L_m]]
+
+     B_x = [0, 0, 1/L_m]^T
+
+
+Add this acceleration to x_y = [y', y, i_y]^T:
+
+x_y' = [y'', y', i_y']^T
+with y'' = r_m K_m i_y / (2J_m + m r_m^2) - mu_y y' / (2J_m / r_m^2 + m)
+     y' = y'
+     i_y' = (u_y - R_m i_y) / L_m
+
+x_y' = f_y(x_y, u_y) = A_y x_y + B_y u_y
+
+with A_y = [[-mu_y / (2J_m / r_m^2 + m),     0,     r_m K_m / (2J_m + m r_m^2)],
+            [1,                              0,                  0],
+            [0,                              0,             -R_m / L_m]]
+
+     B_y = B_x = [0, 0, 1/L_m]^T
+
+===========================================================
+
+Generate inputs from trajectories
+
+To reverse the problem and derive inputs from trajectories, take our state-space equations for x:
+x'' = r_m K_m i_x / (2J_m + m r_m^2) - mu_x x' / (2J_m / r_m^2 + m)
+i_x' = (u_x - R_m i_x) / L_m
+->
+i_x = ((2J_m + m r_m^2) x'' + mu_x r_m^2 x') / (r_m K_m)
+u_x = L_m i_x' + R_m i_x
+->
+i_x' = ((2J_m + m r_m^2) x''' + mu_x r_m^2 x'') / (r_m K_m)
+
+Now substitute i_x' and i_x into the equation for u_x:
+
+u_x = L_m ((2J_m + m r_m^2) x''' + mu_x r_m^2 x'') / (r_m K_m) + R_m ((2J_m + m r_m^2) x'' + mu_x r_m^2 x') / (r_m K_m)
+= (L_m (2J_m + m r_m^2) x''' + (L_m mu_x r_m^2 + R_m (2J_m + m r_m^2)) x'' + R_m mu_x r_m^2 x') / (r_m K_m)
+
+Similarly for y:
+y'' = r_m K_m i_y / (2J_m + m r_m^2) - mu_y y' / (2J_m / r_m^2 + m)
+i_y' = (u_y - R_m i_y) / L_m
+->
+i_y = ((2J_m + m r_m^2) y'' + mu_y r_m^2 y') / (r_m K_m)
+u_y = L_m i_y' + R_m i_y
+->
+i_y' = ((2J_m + m r_m^2) y''' + mu_y r_m^2 y'') / (r_m K_m)
+->
+u_y = (L_m (2J_m + m r_m^2) y''' + (L_m mu_y r_m^2 + R_m (2J_m + m r_m^2)) y'' + R_m mu_y r_m^2 y') / (r_m K_m)
+
+Therefore, from x''', x'', x', y''', y'', y', we can calculate u_x and u_y.
+

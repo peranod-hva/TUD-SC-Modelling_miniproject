@@ -1,0 +1,82 @@
+To add back-EMF, we modify the DC motor voltage equation:
+u = Ri + Li' + K_e theta'
+
+K_e = K_m, so
+u = Ri + Li' + K_m theta'
+-> i' = (u - Ri - K_m theta') / L
+
+Converting this to our equations we get:
+i_ml' = (u_ml - R_m i_ml - K_m theta_l') / L_m
+i_mr' = (u_mr - R_m i_mr - K_m theta_r') / L_m
+
+Converting this to our decoupled x and y equation:
+x' = r_m (theta_l' + theta_r') / 2
+u_x = u_ml + u_mr
+i_x = i_ml + i_mr
+i_x' = i_ml' + i_mr' = (u_x - R_m i_x - 2 K_m x' / r_m) / L_m
+
+x_x = [x', x, i_x]^T:
+x_x' = [x'', x', i_x']^T:
+with x'' = r_m K_m i_x / (2J_m + m r_m^2) - mu_x x' / (2J_m / r_m^2 + m)
+     x' = x'
+     i_x' = (u_x - R_m i_x - 2 K_m x' / r_m) / L_m
+
+x_x' = f_x(x_x, u_x) = A_x x_x + B_x u_x
+     
+with A_x = [[-mu_x / (2J_m / r_m^2 + m),     0,     r_m K_m / (2J_m + m r_m^2)],
+            [1,                              0,                   0],
+            [(-2 K_m / r_m) / L_m,           0,              -R_m / L_m]]
+
+     B_x = [0, 0, 1/L_m]^T
+
+
+y' = r_m (theta_l' - theta_r') / 2
+u_y = u_ml - u_mr
+i_y = i_ml - i_mr
+i_y' = i_ml' - i_mr' = (u_y - R_m i_y - 2 K_m y' / r_m) / L_m
+
+x_y = [y', y, i_y]^T:
+x_y' = [y'', y', i_y']^T
+with y'' = r_m K_m i_y / (2J_m + m r_m^2) - mu_y y' / (2J_m / r_m^2 + m)
+     y' = y'
+     i_y' = (u_y - R_m i_y - 2 K_m y' / r_m) / L_m
+
+x_y' = f_y(x_y, u_y) = A_y x_y + B_y u_y
+
+with A_y = [[-mu_y / (2J_m / r_m^2 + m),     0,     r_m K_m / (2J_m + m r_m^2)],
+            [1,                              0,                  0],
+            [(-2 K_m / r_m) / L_m,           0,             -R_m / L_m]]
+
+     B_y = B_x = [0, 0, 1/L_m]^T
+
+
+===========================================================
+
+Generate inputs from trajectories
+
+To reverse the problem and derive inputs from trajectories, take our state-space equations for x:
+x'' = r_m K_m i_x / (2J_m + m r_m^2) - mu_x x' / (2J_m / r_m^2 + m)
+i_x' = (u_x - R_m i_x - 2 K_m x' / r_m) / L_m
+->
+i_x = ((2J_m + m r_m^2) x'' + mu_x r_m^2 x') / (r_m K_m)
+u_x = L_m i_x' + R_m i_x + 2 K_m x' / r_m
+->
+i_x' = ((2J_m + m r_m^2) x''' + mu_x r_m^2 x'') / (r_m K_m)
+
+Now substitute i_x' and i_x into the equation for u_x:
+
+u_x = L_m (((2J_m + m r_m^2) x'' + mu_x r_m^2 x') / (r_m K_m)) + R_m ((2J_m + m r_m^2) x'' + mu_x r_m^2 x') / (r_m K_m) + 2 K_m x' / r_m
+= (L_m (2J_m + m r_m^2) x''' + (L_m mu_x r_m^2 + R_m (2J_m + m r_m^2)) x'' + (R_m mu_x r_m^2 + 2 K_m^2)x') / (r_m K_m)
+
+Similarly for y:
+y'' = r_m K_m i_y / (2J_m + m r_m^2) - mu_y y' / (2J_m / r_m^2 + m)
+i_y' = (u_y - R_m i_y - 2 K_m y') / L_m
+->
+i_y = ((2J_m + m r_m^2) y'' + mu_y r_m^2 y') / (r_m K_m)
+u_y = L_m i_y' + R_m i_y + 2 K_m y' / r_m
+->
+i_y' = ((2J_m + m r_m^2) y''' + mu_y r_m^2 y'') / (r_m K_m)
+->
+u_y = (L_m (2J_m + m r_m^2) y''' + (L_m mu_y r_m^2 + R_m (2J_m + m r_m^2)) y'' + (R_m mu_y r_m^2 + 2 K_m^2) y') / (r_m K_m)
+
+Therefore, from x''', x'', x', y''', y'', y', we can calculate u_x and u_y.
