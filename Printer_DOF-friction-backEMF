@@ -66,7 +66,7 @@ i_x' = ((2J_m + m r_m^2) x''' + mu_x r_m^2 x'') / (r_m K_m)
 Now substitute i_x' and i_x into the equation for u_x:
 
 u_x = L_m (((2J_m + m r_m^2) x'' + mu_x r_m^2 x') / (r_m K_m)) + R_m ((2J_m + m r_m^2) x'' + mu_x r_m^2 x') / (r_m K_m) + 2 K_m x' / r_m
-= (L_m (2J_m + m r_m^2) x''' + (L_m mu_x r_m^2 + R_m (2J_m + m r_m^2)) x'' + (R_m mu_x r_m^2 + 2 K_m^2)x') / (r_m K_m)
+= (L_m (2J_m + m r_m^2) x''' + (L_m mu_x r_m^2 + R_m (2J_m + m r_m^2)) x'' + (R_m mu_x r_m^2 + 2 K_m^2) x') / (r_m K_m)
 
 Similarly for y:
 y'' = r_m K_m i_y / (2J_m + m r_m^2) - mu_y y' / (2J_m / r_m^2 + m)

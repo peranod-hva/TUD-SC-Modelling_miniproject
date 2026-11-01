@@ -1,0 +1,95 @@
+Q1.5 Model the Nozzle
+
+We model the nozzle using the electrical circuit in Fig. 3 and a lumped
+thermal model. The input is the controllable nozzle voltage u_n.
+
+Variables and parameters :
+
+u_n    Input voltage [V]
+V_c    Voltage across the capacitor and resistor [V]
+i_n    Current through the inductor [A]
+i_C    Capacitor current [A]
+i_R    Resistor current [A]
+T_n    Nozzle temperature [K]
+T_e    Environmental temperature [K]
+L_n    Inductance [H]
+C_n    Capacitance [F]
+R_n    Electrical resistance [ohm]
+C_t,n  Nozzle thermal capacity [J/K]
+R_t,n  Equivalent nozzle thermal resistance [K/W]
+
+
+1. Thermal model
+The resistor and the capacitor are in parallel, so the resistor voltage
+is equal to V_c. Electrical power dissipated in the resistor is
+
+P_in = V_c^2 / R_n
+
+The thermal energy stored in the nozzle changes at the rate
+
+P_stored = C_t,n * dT_n/dt
+
+The heat loss to the environment (including the filament, represented
+by an equivalent thermal resistance) is
+
+P_out = (T_n - T_e) / R_t,n
+
+From the energy balance,
+
+P_stored = P_in - P_out
+
+C_t,n * dT_n/dt = V_c^2/R_n - (T_n - T_e)/R_t,n
+
+Therefore,
+
+dT_n/dt = V_c^2/(C_t,n * R_n) - (T_n - T_e)/(C_t,n * R_t,n)
+
+
+2. Electrical model
+
+Kirchhoff's Voltage Law (KVL) for the inductor and parallel branch:
+
+u_n = V_L + V_c
+V_L = L_n * di_n/dt
+
+Therefore,
+
+di_n/dt = (u_n - V_c)/L_n
+
+Kirchhoff's Current Law (KCL) at the parallel branch:
+
+i_n = i_C + i_R
+
+i_C = C_n * dV_c/dt
+i_R = V_c/R_n
+
+Therefore,
+
+i_n = C_n * dV_c/dt + V_c/R_n
+
+dV_c/dt = i_n/C_n - V_c/(C_n * R_n)
+
+
+3. State-space description
+
+We choose the state vector
+
+x_n = [T_n, V_c, i_n]^T
+
+and the input u_n. The state derivative is
+
+dx_n/dt = [dT_n/dt, dV_c/dt, di_n/dt]^T
+
+The resulting state-space model is
+
+dx_n/dt = f_n(x_n, u_n),
+
+with
+
+f_n(x_n, u_n) = [
+    V_c^2/(C_t,n * R_n) - (T_n - T_e)/(C_t,n * R_t,n),
+    i_n/C_n - V_c/(C_n * R_n),
+    (u_n - V_c)/L_n
+]^T
+
+The model is nonlinear because the thermal equation contains V_c^2.
